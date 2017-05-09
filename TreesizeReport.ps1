@@ -19,3 +19,18 @@ foreach ($path in $data){
 	#write-host "Scanning $path Using sheetname $name"
 	&"$command" /EXCEL $workingpath\$filename /NOGUI /SHEETNAME $name /EXPAND 50MB /HIDESMALLFOLDERS 50MB /SIZEUNIT 2 $path | out-null
 }
+
+#Set up mail variables 
+$date=get-date -Format 'dd/MM/yyyy'
+$toAddress="TO@EMAIL.COM"
+$ccAddress="CC@EMAIL.COM"
+$fromAddress="FROM@EMAIL.COM"
+$subject="$date Treesize Report"
+$smtp="SMTP.DOMAIN.COM"
+$attachment="$workingpath\$filename"
+$body="Treesize report for $date <br> This is an automated email message, please <b>do not reply.</b>"
+
+#Send the email
+Send-MailMessage -to $toAddress -cc $ccAddress -from $fromAddress -subject $subject -smtpserver $smtp -body $body -BodyAsHtml -attachment $attachment 
+
+
